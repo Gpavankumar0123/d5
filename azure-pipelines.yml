@@ -40,3 +40,20 @@ steps:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'paytm'
     publishLocation: 'Container'
+- task: Maven@3
+  inputs:
+    mavenPomFile: 'pom.xml'
+    mavenOptions: '-Xmx3072m'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.8'
+    jdkArchitectureOption: 'x64'
+    publishJUnitResults: true
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    goals: 'package'
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Azure subscription 1(a338313a-fcff-49d7-9465-1f6415a88266)'
+    appType: 'webAppLinux'
+    WebAppName: 'P0123'
+    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
